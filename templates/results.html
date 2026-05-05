@@ -2,89 +2,60 @@
 <html>
 <head>
     <title>Tripmakur Results</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f7fa;
-            text-align: center;
-        }
-
-        .container {
-            width: 600px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        .trip {
-            border-bottom: 1px solid #ddd;
-            padding: 15px;
-        }
-
-        h1 {
-            color: #0b3d91;
-        }
-
-        .score {
-            color: #28a745;
-            font-weight: bold;
-        }
-
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #0b3d91;
-        }
-
-        img {
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-    <div class="container">
-        <img src="{{ url_for('static', filename='logo.png') }}" width="180">
+<header class="header">
+    <img class="logo" src="{{ url_for('static', filename='logo.png') }}" alt="Tripmakur Logo">
+    <p class="tagline">The smarter way to find your next destination</p>
+</header>
 
-        <h1>Your Recommended Trips</h1>
+<main class="hero">
+    <section class="card">
+        <h1>Your recommended trips</h1>
+        <p class="subtitle">Here are your best matches based on your answers.</p>
 
-        <p><strong>Starting city:</strong> {{ home_city }}</p>
-        <p><strong>Trip type:</strong> {{ trip_length }}</p>
-        <p><strong>Vacation style:</strong> {{ trip_type }}</p>
-        <p><strong>Budget:</strong> {{ budget }}</p>
+        <div class="summary">
+            <p><strong>Starting city:</strong> {{ home_city }}</p>
+            <p><strong>Trip type:</strong> {{ trip_length }}</p>
+            <p><strong>Vacation style:</strong> {{ trip_type }}</p>
+            <p><strong>Budget:</strong> {{ budget }}</p>
 
-        {% if favorite_destination %}
-            <p><strong>Favorite trip:</strong> {{ favorite_destination }}</p>
-        {% endif %}
+            {% if favorite_destination %}
+                <p><strong>Favorite past trip:</strong> {{ favorite_destination }}</p>
+            {% endif %}
 
-        {% if favorite_reason %}
-            <p><strong>What you liked:</strong> {{ favorite_reason }}</p>
-        {% endif %}
-
-        <hr>
+            {% if favorite_reason %}
+                <p><strong>What you liked:</strong> {{ favorite_reason }}</p>
+            {% endif %}
+        </div>
 
         {% if matches %}
             {% for trip in matches %}
-                <div class="trip">
-                    <h2>{{ trip.name }}</h2>
-                    <p>{{ trip.description }}</p>
-                    <p class="score">Match Score: {{ trip.score }}</p>
+                <div class="trip-card">
+                    <div class="trip-info">
+                        <h2>{{ trip.name }}</h2>
+                        <p>{{ trip.description }}</p>
 
-                    {% if trip.trip_length == "weekend" %}
-                        <p>Drive time: ~{{ trip.max_drive_hours }} hours</p>
-                    {% endif %}
+                        {% if trip.trip_length == "weekend" %}
+                            <p><strong>Estimated drive:</strong> About {{ trip.max_drive_hours }} hours</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="score">
+                        Match<br>{{ trip.score }}
+                    </div>
                 </div>
             {% endfor %}
         {% else %}
-            <p>No matches found. Try adjusting your answers.</p>
+            <p>No matches found. Try increasing your driving distance or changing your trip type.</p>
         {% endif %}
 
-        <a href="/">Start Over</a>
-    </div>
+        <a class="back-link" href="/">← Start Over</a>
+    </section>
+</main>
 
 </body>
 </html>
