@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">Your Results</p>
+  <h1>Here are your starter trip matches.</h1>
+  <p>These are free-version recommendations based on your answers. Later, this can connect to real flight, hotel, cruise, and activity APIs.</p>
+</section>
+
+<section class="results-grid">
+  {% for destination in results %}
+  <article class="result-card">
+    <div class="result-topline">{{ destination.type }}</div>
+    <h2>{{ destination.name }}</h2>
+    <p>{{ destination.why }}</p>
+    <div class="result-meta">
+      <span><strong>Best for:</strong> {{ destination.best_for }}</span>
+      <span><strong>Estimated cost:</strong> {{ destination.estimated_cost }}</span>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+
+<section class="next-box">
+  <h2>Next step</h2>
+  <p>In the paid/API version, this page can show real flight prices, hotel links, cruise options, restaurants, attractions, weather, and affiliate booking links.</p>
+  <a class="button secondary" href="/planner">Try Again</a>
+</section>
+{% endblock %}

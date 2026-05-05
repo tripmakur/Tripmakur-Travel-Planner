@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">Tripmakur Planner</p>
+  <h1>Tell us what kind of trip you want.</h1>
+  <p>Free version: no paid APIs, no login, and no database required.</p>
+</section>
+
+<form class="planner-form" action="/results" method="post">
+  <label>
+    Home city
+    <input type="text" name="home_city" placeholder="Example: Memphis, TN" required>
+  </label>
+
+  <label>
+    Approximate total trip budget
+    <select name="budget" required>
+      <option value="low">Under $1,000</option>
+      <option value="medium">$1,000 - $3,000</option>
+      <option value="high">$3,000+</option>
+    </select>
+  </label>
+
+  <label>
+    Preferred vacation type
+    <select name="vacation_type" required>
+      <option value="beach">Beach</option>
+      <option value="mountains">Mountains / Road Trip</option>
+      <option value="city">City / Food / Culture</option>
+      <option value="cruise">Cruise</option>
+      <option value="allinclusive">All Inclusive</option>
+      <option value="themeparks">Theme Parks</option>
+    </select>
+  </label>
+
+  <label>
+    Who is traveling?
+    <select name="travel_group" required>
+      <option value="family">Family</option>
+      <option value="romantic">Couple</option>
+      <option value="adventure">Friends / Adventure</option>
+      <option value="relaxing">Solo / Relaxing</option>
+    </select>
+  </label>
+
+  <fieldset>
+    <legend>What matters most?</legend>
+    <label class="check"><input type="checkbox" name="interests" value="relaxing"> Relaxing</label>
+    <label class="check"><input type="checkbox" name="interests" value="food"> Food</label>
+    <label class="check"><input type="checkbox" name="interests" value="adventure"> Adventure</label>
+    <label class="check"><input type="checkbox" name="interests" value="nightlife"> Nightlife</label>
+    <label class="check"><input type="checkbox" name="interests" value="culture"> Culture</label>
+    <label class="check"><input type="checkbox" name="interests" value="entertainment"> Entertainment</label>
+  </fieldset>
+
+  <label>
+    Where have you been before?
+    <textarea name="past_trips" placeholder="Example: Destin, Las Vegas, Disney World"></textarea>
+  </label>
+
+  <label>
+    What was your favorite destination and why?
+    <textarea name="favorite_trip" placeholder="Example: I loved Destin because it was relaxing and easy for the family."></textarea>
+  </label>
+
+  <button class="button primary full" type="submit">Show My Trip Ideas</button>
+</form>
+{% endblock %}
