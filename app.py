@@ -5,115 +5,122 @@ app = Flask(__name__)
 DESTINATIONS = [
     {
         "name": "Gatlinburg, Tennessee",
-        "type": "Mountains / Road Trip",
+        "type": "mountain",
         "budget": "low",
-        "vibe": ["relaxing", "adventure", "family"],
-        "climate": "mountains",
-        "why": "Great for cabins, scenic drives, hiking, family attractions, and an affordable driveable getaway.",
-        "best_for": "Families, couples, weekend trips",
-        "estimated_cost": "$600 - $1,500",
+        "style": "family",
+        "trip_length": "weekend",
+        "max_drive_hours": 7,
+        "description": "Cabins, hiking, attractions, mountain views, and family-friendly activities."
     },
     {
-        "name": "Destin, Florida",
-        "type": "Beach",
+        "name": "Nashville, Tennessee",
+        "type": "city",
         "budget": "medium",
-        "vibe": ["relaxing", "family", "romantic"],
-        "climate": "beach",
-        "why": "Beautiful beaches, seafood, shopping, and activities for families or couples.",
-        "best_for": "Beach vacations, families, couples",
-        "estimated_cost": "$1,200 - $3,000",
+        "style": "couple",
+        "trip_length": "weekend",
+        "max_drive_hours": 4,
+        "description": "Live music, restaurants, nightlife, and a fun quick getaway."
     },
     {
         "name": "New Orleans, Louisiana",
-        "type": "City / Food / Culture",
+        "type": "city",
         "budget": "medium",
-        "vibe": ["food", "nightlife", "culture"],
-        "climate": "city",
-        "why": "Perfect for food, music, history, nightlife, and a unique cultural experience.",
-        "best_for": "Couples, friends, food lovers",
-        "estimated_cost": "$900 - $2,500",
+        "style": "couple",
+        "trip_length": "weekend",
+        "max_drive_hours": 7,
+        "description": "Food, music, history, nightlife, and unique culture."
     },
     {
-        "name": "Orlando, Florida",
-        "type": "Theme Parks / Family",
-        "budget": "high",
-        "vibe": ["family", "adventure", "entertainment"],
-        "climate": "themeparks",
-        "why": "Theme parks, resorts, family entertainment, and plenty of vacation packages.",
-        "best_for": "Families and entertainment trips",
-        "estimated_cost": "$2,000 - $6,000+",
+        "name": "Destin, Florida",
+        "type": "beach",
+        "budget": "medium",
+        "style": "family",
+        "trip_length": "week",
+        "max_drive_hours": 9,
+        "description": "White sand beaches, seafood, family fun, and relaxing resorts."
     },
     {
         "name": "Cancun, Mexico",
-        "type": "All Inclusive",
-        "budget": "medium",
-        "vibe": ["relaxing", "romantic", "beach"],
-        "climate": "allinclusive",
-        "why": "A strong pick for resorts, beaches, food included, and simple package-style planning.",
-        "best_for": "Couples, honeymoons, relaxing trips",
-        "estimated_cost": "$1,800 - $4,500",
+        "type": "beach",
+        "budget": "high",
+        "style": "couple",
+        "trip_length": "week",
+        "max_drive_hours": 0,
+        "description": "All-inclusive resorts, beaches, pools, excursions, and nightlife."
     },
     {
-        "name": "Caribbean Cruise",
-        "type": "Cruise",
-        "budget": "medium",
-        "vibe": ["relaxing", "family", "entertainment"],
-        "climate": "cruise",
-        "why": "Cruises make planning simple with lodging, meals, entertainment, and multiple stops bundled together.",
-        "best_for": "First-time travelers, families, couples",
-        "estimated_cost": "$1,500 - $4,000",
-    },
+        "name": "Orlando, Florida",
+        "type": "family",
+        "budget": "high",
+        "style": "family",
+        "trip_length": "week",
+        "max_drive_hours": 12,
+        "description": "Theme parks, entertainment, resorts, shopping, and family attractions."
+    }
 ]
-
-
-def score_destination(destination, answers):
-    score = 0
-
-    if destination["budget"] == answers.get("budget"):
-        score += 3
-    elif answers.get("budget") == "high":
-        score += 1
-
-    if destination["climate"] == answers.get("vacation_type"):
-        score += 4
-
-    interests = answers.getlist("interests")
-    for interest in interests:
-        if interest in destination["vibe"]:
-            score += 2
-
-    if answers.get("travel_group") in destination["vibe"]:
-        score += 2
-
-    return score
-
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
-
-@app.route("/planner")
-def planner():
-    return render_template("planner.html")
-
-
 @app.route("/results", methods=["POST"])
 def results():
-    answers = request.form
-    ranked = sorted(
-        DESTINATIONS,
-        key=lambda destination: score_destination(destination, answers),
-        reverse=True,
+    home_city = request.form.get("home_city")
+    trip_length = request.form.get("trip_length")
+    trip_type = request.form.get("trip_type")
+    budget = request.form.get("budget")
+    travel_style = request.form.get("travel_style")
+    past_destination = request.form.get("past_destination")
+    favorite_destination = request.form.get("favorite_destination")
+    favorite_reason = request.form.get("favorite_reason")
+
+    drive_hours = request.form.get("drive_hours")
+    drive_hours = int(drive_hours) if drive_hours else 99
+
+    matches = []
+
+    for destination in DESTINATIONS:
+        score = 0
+
+        if destination["trip_length"] == trip_length:
+            score += 2
+
+        if destination["type"] == trip_type:
+            score += 3
+
+        if destination["budget"] == budget:
+            score += 2
+
+        if destination["style"] == travel_style:
+            score += 2
+
+        if trip_length == "weekend":
+            if destination["max_drive_hours"] > 0 and destination["max_drive_hours"] <= drive_hours:
+                score += 3
+            else:
+                score -= 3
+
+        if score > 0:
+            destination_copy = destination.copy()
+            destination_copy["score"] = score
+            matches.append(destination_copy)
+
+    matches = sorted(matches, key=lambda x: x["score"], reverse=True)
+
+    return render_template(
+        "results.html",
+        matches=matches,
+        home_city=home_city,
+        trip_length=trip_length,
+        trip_type=trip_type,
+        budget=budget,
+        travel_style=travel_style,
+        past_destination=past_destination,
+        favorite_destination=favorite_destination,
+        favorite_reason=favorite_reason
     )
-    top_results = ranked[:3]
-    return render_template("results.html", results=top_results, answers=answers)
 
-
-@app.route("/about")
-def about():
-    return render_template("about.html")
-
-
+if __name__ == "__main__":
+    app.run(debug=True)
 if __name__ == "__main__":
     app.run(debug=True)
