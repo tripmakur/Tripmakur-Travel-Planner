@@ -1,123 +1,98 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
     <title>Tripmakur</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f7fa;
-            text-align: center;
-        }
-
-        .container {
-            width: 500px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            color: #0b3d91;
-        }
-
-        p {
-            color: #555;
-        }
-
-        select, input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0 15px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            background-color: #28a745;
-            color: white;
-            padding: 12px;
-            border: none;
-            width: 100%;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #218838;
-        }
-
-        img {
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-    <div class="container">
-        <img src="{{ url_for('static', filename='logo.png') }}" width="180">
+<header class="header">
+    <img class="logo" src="{{ url_for('static', filename='logo.png') }}" alt="Tripmakur Logo">
+    <p class="tagline">The smarter way to find your next destination</p>
+</header>
 
-        <h1>Tripmakur</h1>
-        <p>The smarter way to find your next destination</p>
+<main class="hero">
+    <section class="card">
+        <h1>Let’s find your perfect getaway</h1>
+        <p class="subtitle">Answer a few questions and Tripmakur will suggest vacation ideas based on your style, budget, and travel distance.</p>
 
-        <form action="/results" method="POST">
+        <form action="/results" method="POST" class="form-grid">
 
-            <label>Starting city</label>
-            <input type="text" name="home_city" placeholder="Memphis, TN" required>
+            <div class="form-group full">
+                <label>Starting city</label>
+                <input type="text" name="home_city" placeholder="Example: Memphis, TN" required>
+            </div>
 
-            <label>Trip type</label>
-            <select name="trip_length">
-                <option value="weekend">Weekend Trip</option>
-                <option value="week">Full Vacation</option>
-            </select>
+            <div class="form-group">
+                <label>Trip type</label>
+                <select name="trip_length">
+                    <option value="weekend">Weekend Trip</option>
+                    <option value="week">Full Vacation</option>
+                </select>
+            </div>
 
-            <label>Driving distance (for weekend trips)</label>
-            <select name="drive_hours">
-                <option value="3">Up to 3 hours</option>
-                <option value="5">Up to 5 hours</option>
-                <option value="7">Up to 7 hours</option>
-                <option value="10">Up to 10 hours</option>
-            </select>
+            <div class="form-group">
+                <label>Driving distance</label>
+                <select name="drive_hours">
+                    <option value="3">Up to 3 hours</option>
+                    <option value="5">Up to 5 hours</option>
+                    <option value="7">Up to 7 hours</option>
+                    <option value="10">Up to 10 hours</option>
+                </select>
+            </div>
 
-            <label>Vacation type</label>
-            <select name="trip_type">
-                <option value="beach">Beach</option>
-                <option value="mountain">Mountains</option>
-                <option value="city">City</option>
-                <option value="family">Family</option>
-            </select>
+            <div class="form-group">
+                <label>Vacation type</label>
+                <select name="trip_type">
+                    <option value="beach">Beach</option>
+                    <option value="mountain">Mountains / Cabin</option>
+                    <option value="city">City / Nightlife</option>
+                    <option value="family">Theme Parks / Family Fun</option>
+                </select>
+            </div>
 
-            <label>Who is going?</label>
-            <select name="travel_style">
-                <option value="couple">Couple</option>
-                <option value="family">Family</option>
-                <option value="friends">Friends</option>
-                <option value="solo">Solo</option>
-            </select>
+            <div class="form-group">
+                <label>Who is going?</label>
+                <select name="travel_style">
+                    <option value="couple">Couple</option>
+                    <option value="family">Family</option>
+                    <option value="friends">Friends</option>
+                    <option value="solo">Solo</option>
+                </select>
+            </div>
 
-            <label>Budget</label>
-            <select name="budget">
-                <option value="low">Budget</option>
-                <option value="medium">Moderate</option>
-                <option value="high">High</option>
-            </select>
+            <div class="form-group">
+                <label>Budget</label>
+                <select name="budget">
+                    <option value="low">Budget Friendly</option>
+                    <option value="medium">Moderate</option>
+                    <option value="high">Higher Budget</option>
+                </select>
+            </div>
 
-            <label>Where have you traveled before?</label>
-            <input type="text" name="past_destination">
+            <div class="form-group">
+                <label>Where have you traveled before?</label>
+                <input type="text" name="past_destination" placeholder="Orlando, Cancun, Nashville">
+            </div>
 
-            <label>Favorite destination</label>
-            <input type="text" name="favorite_destination">
+            <div class="form-group">
+                <label>Favorite past destination</label>
+                <input type="text" name="favorite_destination" placeholder="Example: Destin, Florida">
+            </div>
 
-            <label>Why was it your favorite?</label>
-            <textarea name="favorite_reason"></textarea>
+            <div class="form-group full">
+                <label>Why was it your favorite?</label>
+                <textarea name="favorite_reason" placeholder="Example: beaches, food, relaxing, family activities"></textarea>
+            </div>
 
-            <button type="submit">Find My Trip</button>
+            <div class="form-group full">
+                <button type="submit">Find My Trip</button>
+            </div>
 
         </form>
-    </div>
+    </section>
+</main>
 
 </body>
 </html>
