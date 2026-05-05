@@ -1,21 +1,123 @@
-   <label>What is your budget?</label><br>
-        <select name="budget" required>
-            <option value="low">Budget Friendly</option>
-            <option value="medium">Moderate</option>
-            <option value="high">Higher Budget</option>
-        </select><br><br>
+  <!DOCTYPE html>
+<html>
+<head>
+    <title>Tripmakur</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            text-align: center;
+        }
 
-        <label>Where have you traveled before?</label><br>
-        <input type="text" name="past_destination" placeholder="Example: Orlando, Cancun, Nashville"><br><br>
+        .container {
+            width: 500px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
 
-        <label>What was your favorite destination?</label><br>
-        <input type="text" name="favorite_destination" placeholder="Example: Destin, Florida"><br><br>
+        h1 {
+            color: #0b3d91;
+        }
 
-        <label>Why was it your favorite?</label><br>
-        <textarea name="favorite_reason" rows="4" placeholder="Example: beaches, food, relaxing, family activities"></textarea><br><br>
+        p {
+            color: #555;
+        }
 
-        <button type="submit">Find My Trip</button>
-    </form>
+        select, input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px;
+            border: none;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        img {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <img src="{{ url_for('static', filename='logo.png') }}" width="180">
+
+        <h1>Tripmakur</h1>
+        <p>The smarter way to find your next destination</p>
+
+        <form action="/results" method="POST">
+
+            <label>Starting city</label>
+            <input type="text" name="home_city" placeholder="Memphis, TN" required>
+
+            <label>Trip type</label>
+            <select name="trip_length">
+                <option value="weekend">Weekend Trip</option>
+                <option value="week">Full Vacation</option>
+            </select>
+
+            <label>Driving distance (for weekend trips)</label>
+            <select name="drive_hours">
+                <option value="3">Up to 3 hours</option>
+                <option value="5">Up to 5 hours</option>
+                <option value="7">Up to 7 hours</option>
+                <option value="10">Up to 10 hours</option>
+            </select>
+
+            <label>Vacation type</label>
+            <select name="trip_type">
+                <option value="beach">Beach</option>
+                <option value="mountain">Mountains</option>
+                <option value="city">City</option>
+                <option value="family">Family</option>
+            </select>
+
+            <label>Who is going?</label>
+            <select name="travel_style">
+                <option value="couple">Couple</option>
+                <option value="family">Family</option>
+                <option value="friends">Friends</option>
+                <option value="solo">Solo</option>
+            </select>
+
+            <label>Budget</label>
+            <select name="budget">
+                <option value="low">Budget</option>
+                <option value="medium">Moderate</option>
+                <option value="high">High</option>
+            </select>
+
+            <label>Where have you traveled before?</label>
+            <input type="text" name="past_destination">
+
+            <label>Favorite destination</label>
+            <input type="text" name="favorite_destination">
+
+            <label>Why was it your favorite?</label>
+            <textarea name="favorite_reason"></textarea>
+
+            <button type="submit">Find My Trip</button>
+
+        </form>
+    </div>
+
 </body>
 </html>
-
